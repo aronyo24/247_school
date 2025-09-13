@@ -58,40 +58,7 @@ const Index = () => {
 </div>
 
       {/* Quick Quiz PDF download controls */}
-      <div className="container mx-auto px-4 mt-24 flex justify-center items-center gap-3">
-        <label className="flex items-center gap-2 text-sm">
-          Questions:
-          <select
-            value={questionsCount}
-            onChange={(e) => setQuestionsCount(Number(e.target.value))}
-            className="ml-2 px-2 py-1 border rounded"
-          >
-            <option value={4}>4</option>
-            <option value={6}>6</option>
-            <option value={8}>8</option>
-          </select>
-        </label>
-        <button
-          onClick={() => handleDownloadQuiz(1, questionsCount)}
-          disabled={downloading}
-          className="bg-eduplay-blue text-white px-4 py-2 rounded shadow hover:opacity-90 disabled:opacity-50"
-        >
-          {downloading ? 'Preparing...' : 'Download Quiz PDF'}
-        </button>
-        <button
-          onClick={() => handleDownloadQuiz(3, questionsCount)}
-          disabled={downloading}
-          className="bg-eduplay-green text-white px-3 py-2 rounded shadow hover:opacity-90 disabled:opacity-50"
-        >
-          {downloading ? 'Preparing...' : 'Download 3 Variants (ZIP)'}
-        </button>
-      </div>
-
-      <div className="container mx-auto px-4 mt-6 flex justify-center">
-        <Link to="/quiz-printable" className="bg-eduplay-blue text-white px-4 py-2 rounded shadow">
-          Open Printable Quiz
-        </Link>
-      </div>
+      
 
       <HeroSection />
 

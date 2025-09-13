@@ -1,33 +1,43 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, ArrowRight, Star, Trophy, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { fetchRandomQuestions, exportQuizPdf } from '@/services/api'; // add exportQuizPdf import
+import { fetchRandomQuestions, exportQuizPdf } from '@/services/api';
+
+const sampleRowsBase = [
+  { id: 1, imageUrl: "/assets/quiz_img/football.png", label: "Footballs" },
+  { id: 2, imageUrl: "/assets/quiz_img/cat.png", label: "Cats" },
+  { id: 3, imageUrl: "/assets/quiz_img/cake.png", label: "Cakes" },
+  { id: 4, imageUrl: "/assets/quiz_img/tree.png", label: "Trees" },
+  { id: 5, imageUrl: "/assets/quiz_img/lion.png", label: "Lions" },
+  { id: 6, imageUrl: "/assets/quiz_img/chocolate.png", label: "Chocolates" },
+];
 
 const generateRandomQuestions = (numQuestions: number) => {
   const questions = [];
-
   for (let i = 1; i <= numQuestions; i++) {
-    const footballCount = Math.floor(Math.random() * 8) + 2; // between 2–9
+    const item = sampleRowsBase[Math.floor(Math.random() * sampleRowsBase.length)];
+    const count = Math.floor(Math.random() * 8) + 2; // between 2–9
     const options = [
-      footballCount - 1,
-      footballCount,
-      footballCount + 1,
-      footballCount + 2,
-    ].sort(() => Math.random() - 0.5); // shuffle options
-
+      count - 1,
+      count,
+      count + 1,
+      count + 2,
+    ].sort(() => Math.random() - 0.5);
     questions.push({
       id: i,
-      title: `Football Question ${i} ⚽`,
-      question: "How many footballs do you see?",
-      footballCount,
+      title: `${item.label} Question ${i}`,
+      question: `How many ${item.label.toLowerCase()} do you see?`,
+      imageUrl: item.imageUrl,
+      count,
       options,
-      correctAnswer: footballCount,
-      explanation: `Great job! There are ${footballCount} footballs!`,
+      correctAnswer: count,
+      explanation: `Great job! There are ${count} ${item.label.toLowerCase()}!`,
+      label: item.label,
     });
   }
-
   return questions;
 };
 
@@ -40,7 +50,7 @@ const NurseryMath = () => {
   const [lessons, setLessons] = useState<any[]>([]);
 
   useEffect(() => {
-    // Generate 5 random football count questions when component loads
+    // Generate 5 random questions when component loads
     setLessons(generateRandomQuestions(5));
   }, []);
 
@@ -57,7 +67,6 @@ const NurseryMath = () => {
   const handleAnswerSelect = (answer: number) => {
     setSelectedAnswer(answer);
     setShowResult(true);
-    
     if (answer === currentLessonData.correctAnswer) {
       setScore(score + 1);
     }
@@ -81,16 +90,15 @@ const NurseryMath = () => {
 
   const handleExportPdf = async () => {
     const payload = {
-      title: "Football Counting",
+      title: "Nursery Counting Quiz",
       questions: lessons.map(l => ({
         id: l.id,
-        imageUrl: window.location.origin + "/assets/football.png", // ensure accessible URL
-        count: l.footballCount,
+        imageUrl: window.location.origin + l.imageUrl,
+        count: l.count,
         question_text: l.question,
         name: l.title,
       })),
     };
-
     try {
       const blob = await exportQuizPdf(payload);
       const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
@@ -106,17 +114,17 @@ const NurseryMath = () => {
     }
   };
 
-  const renderFootballs = (count: number, className = "") => {
+  const renderImages = (imageUrl: string, count: number, label: string, className = "") => {
     return Array.from({ length: count }).map((_, index) => (
-      <div 
-        key={index} 
+      <div
+        key={index}
         className={`w-16 h-16 lg:w-20 lg:h-20 animate-bounce-gentle ${className}`}
         style={{ animationDelay: `${index * 200}ms` }}
       >
-        <img 
-          src="/assets/football.png" 
-          alt="Football" 
-          className="w-full h-full object-contain drop-shadow-lg hover:scale-110 transition-transform duration-300" 
+        <img
+          src={imageUrl}
+          alt={label}
+          className="w-full h-full object-contain drop-shadow-lg hover:scale-110 transition-transform duration-300"
         />
       </div>
     ));
@@ -173,10 +181,10 @@ const NurseryMath = () => {
           </CardHeader>
 
           <CardContent className="space-y-8">
-            {/* Football Display Area */}
+            {/* Image Display Area */}
             <div className="bg-gradient-to-br from-green-100 to-blue-100 rounded-3xl p-8 min-h-[300px] flex items-center justify-center">
               <div className="flex flex-wrap gap-4 justify-center">
-                {renderFootballs(currentLessonData.footballCount)}
+                {renderImages(currentLessonData.imageUrl, currentLessonData.count, currentLessonData.label)}
               </div>
             </div>
 

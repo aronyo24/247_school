@@ -1,7 +1,7 @@
 
 import { Play, Sparkles, BookOpen, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -146,7 +146,9 @@ const HeroSection = () => {
                   
                   {/* Fun Learning Badge */}
                   <div className="bg-gradient-to-r from-eduplay-green to-eduplay-blue text-white px-4 py-2 rounded-full text-sm font-bold animate-scale-bounce">
-                    🚀 Fun Learning Adventure!
+                   <Link to="/quiz-printable" className=" text-white px-4 py-2 rounded shadow">
+                             Open Printable Quiz
+                           </Link>
                   </div>
                   
                   {/* Football Math Interactive Button */}

@@ -13,7 +13,7 @@ from .views import (
 
 urlpatterns = [
     path("api/teams/", TeamList.as_view(), name="team-list"),
-    path("api/track-visitor/", TrackVisitorView.as_view(), name="track-visitor"),
+    # path("api/track-visitor/", TrackVisitorView.as_view(), name="track-visitor"),
     path("api/random-questions/", get_random_questions, name="random-questions"),
     path("api/render-quiz-pdf/", render_quiz_pdf, name="render_quiz_pdf"),
     path("api/generate-quiz/", GenerateQuizAPIView.as_view(), name="generate_quiz"),
